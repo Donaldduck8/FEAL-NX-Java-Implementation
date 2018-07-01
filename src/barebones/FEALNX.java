@@ -1,16 +1,14 @@
 package barebones;
 import java.util.Arrays;
-import java.util.Random;
 
 public class FEALNX {
 
 	public static void main(String[] args) {
 		byte[] pt = hexStringToByteArray("0000000100020003");
-		byte[] test = hexStringToByteArray("000102030405060708090A0B0C0D0E0F");
-		byte[] key = hexStringToByteArray("0123456789ABCDEF0123456789ABCDEF");
+		byte[] key = hexStringToByteArray("000102030405060708090A0B0C0D0E0F");
 		
-		byte[] ct = EncryptFEALNX(pt, test, 32);
-		byte[] decrypted = DecryptFEALNX(ct, test, 32);
+		byte[] ct = EncryptFEALNX(pt, key, 32);
+		byte[] decrypted = DecryptFEALNX(ct, key, 32);
 		
 		StringBuilder sb2 = new StringBuilder();
 		for(byte aa : ct) {
