@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class FEALNX {
 
 	public static void main(String[] args) {
