@@ -79,7 +79,8 @@ public class FEALNX {
 							  subKeys[numberOfRounds+6][1],
 							  subKeys[numberOfRounds+7][0],
 							  subKeys[numberOfRounds+7][1]};
-			LCurrent = XORByteArrays(LCurrent, RCurrent); //TODO This was not included in the specification, but it produces the correct output. 
+			LCurrent = XORByteArrays(LCurrent, RCurrent);
+			//Note that RCurrent makes up the left half of CipherText, and that LCurrent makes up the right half
 			System.arraycopy(RCurrent, 0, CipherText, 0, 4);
 			System.arraycopy(LCurrent, 0, CipherText, 4, 4);
 			CipherText = XORByteArrays(CipherText, LastXOR);
@@ -102,6 +103,7 @@ public class FEALNX {
 							   subKeys[numberOfRounds+7][0],
 							   subKeys[numberOfRounds+7][1]};
 			CipherText = XORByteArrays(CipherText, FirstXOR);
+			//Note that RCurrent makes up the left half of CipherText, and that LCurrent makes up the right half
 			byte[] LCurrent = new byte[4];
 			System.arraycopy(CipherText, 4, LCurrent, 0, 4);
 			byte[] RCurrent = new byte[4];
