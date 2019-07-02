@@ -1,4 +1,3 @@
-package barebones;
 import java.util.Arrays;
 
 public class FEALNX {
