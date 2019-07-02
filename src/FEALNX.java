@@ -3,27 +3,13 @@ import java.util.Arrays;
 public class FEALNX {
 
 	public static void main(String[] args) {
-		byte[] pt = hexStringToByteArray("0000000100020003");
-		byte[] key = hexStringToByteArray("000102030405060708090A0B0C0D0E0F");
-		
-		byte[] ct = EncryptFEALNX(pt, key, 32);
-		byte[] decrypted = DecryptFEALNX(ct, key, 32);
-		
-		StringBuilder sb2 = new StringBuilder();
-		for(byte aa : ct) {
-			sb2.append(String.format("%02X ", aa));
-		}
-		System.out.println(sb2.toString());
-		sb2.setLength(0);
-		System.out.println(Arrays.toString(pt));
-		System.out.println(Arrays.toString(ct));
-		System.out.println(Arrays.toString(decrypted));
+		testMethod();
 	}
 	
 	public static String byteArrayToHexString(byte[] b) {
 		StringBuilder sb = new StringBuilder();
 		for(byte aa : b) {
-			sb.append(String.format("%02X ", aa));
+			sb.append(String.format("%02X", aa));
 		}
 		String ret = sb.toString();
 		sb.setLength(0);
@@ -198,6 +184,56 @@ public class FEALNX {
 			return subKeys;
 		} else {
 			throw new IllegalArgumentException();
+		}
+	}
+	
+	public static void testMethod() {
+		byte[] PT = hexStringToByteArray("0000000100020003");
+		byte[] K = hexStringToByteArray("000102030405060708090A0B0C0D0E0F");
+		
+		//Print Key
+		System.out.println("KEY = " + byteArrayToHexString(K));
+		
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 4096; j++) {
+				//Calculate CT
+				byte[] CT = EncryptFEALNX(PT, K, 32);
+				
+				//Print line
+				System.out.println("PT: " + byteArrayToHexString(PT) + ",  CT: " + byteArrayToHexString(CT));
+				
+				//Increment PT
+				for(int k = 0; k < PT.length; k++) {
+					if(k % 2 == 0) {
+						if(PT[k+1] == hexStringToByte("FF")) {
+							PT[k]++;
+						}
+					} else {
+						if(PT[k] == hexStringToByte("FF")) {
+							PT[k] = hexStringToByte("00");
+						} else {
+							PT[k]++;
+						}
+					}
+				}
+			}
+			//Stop after end of 10th round
+			if(i == 9) break;
+			
+			//Shift key left by 1, append next highest byte
+			for(int j = 0; j < K.length - 1; j++) {
+				K[j] = K[j+1];
+			}
+			K[K.length-1] = (byte) (K[K.length-2] + 1);
+			
+			//Reset PT
+			PT = hexStringToByteArray("0000000100020003");
+			
+			//Print spacer
+			System.out.println();
+			
+			//Print key
+			System.out.println("KEY = " + byteArrayToHexString(K));
 		}
 	}
 	
