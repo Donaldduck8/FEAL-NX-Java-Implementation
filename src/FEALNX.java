@@ -131,7 +131,7 @@ public class FEALNX {
 				
 				System.arraycopy(ACurrent, 0, XORTemp, 0, 4); //Saving Carryover
 				
-				ACurrent = Fktest(ACurrent, XORResult);
+				ACurrent = Fk(ACurrent, XORResult);
 				System.arraycopy(ACurrent, 0, subKeys[2*i], 0, 2);
 				System.arraycopy(ACurrent, 2, subKeys[(2*i)+1], 0, 2);
 				
@@ -197,30 +197,6 @@ public class FEALNX {
 		}
 	}
 	
-	public static byte[] Fk(byte[] a, byte[] b) {																					
-		if(a.length == 4 && 4 == b.length) {
-			byte r2 = S((byte)(a[0]^a[1]), (byte)(b[0]^((byte)a[2]^a[3])), (byte) 1);
-			byte r1 = S(a[0], (byte)(b[2]^r2), (byte) 0);
-			byte r3 = S((byte)(a[2]^a[3]), (byte)(b[1]^S((byte)(a[0]^a[1]),(byte)(b[0]^((byte)(a[2]^a[3]))),(byte)1)), (byte)0);
-			byte r4 = S(a[3], (byte)(b[3]^r3), (byte)1);
-			byte[] ret = {r1,r2,r3,r4};
-			return ret;
-		} else {
-			throw new IllegalArgumentException();
-		}
-	}
-	
-	public static byte[] Fktest(byte[]a, byte[]b) {
-		byte fk1 = (byte) ((byte) a[0]^a[1]);
-		byte fk2 = (byte) ((byte) a[2]^a[3]);
-		fk1 = functionS(fk1, (byte) (fk2^b[0]),(byte)1);
-		fk2 = functionS(fk2, (byte) (fk1^b[1]),(byte)0);
-		byte fk0 = functionS(a[0], (byte) (fk1^b[2]), (byte)0);
-		byte fk3 = functionS(a[3], (byte) (fk2^b[3]), (byte)1);
-		byte[] ebat = {fk0, fk1, fk2, fk3};
-		return ebat;
-	}
-	
 	public static byte[] F(byte[] a, byte[] b) {
 		if(a.length == 4 && b.length == 2) {
 			byte t1 = (byte)(a[3]^a[2]^b[1]);
@@ -228,6 +204,19 @@ public class FEALNX {
 			byte r1 = S(a[0],r2,(byte)0);
 			byte r3 = S(t1,r2,(byte)0);
 			byte r4 = S(r3,a[3],(byte)1);
+			byte[] ret = {r1,r2,r3,r4};
+			return ret;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public static byte[] Fk(byte[] a, byte[] b) {																					
+		if(a.length == 4 && 4 == b.length) {
+			byte r2 = S((byte)(a[0]^a[1]), (byte)(b[0]^((byte)a[2]^a[3])), (byte) 1);
+			byte r1 = S(a[0], (byte)(b[2]^r2), (byte) 0);
+			byte r3 = S((byte)(a[2]^a[3]), (byte)(b[1]^S((byte)(a[0]^a[1]),(byte)(b[0]^((byte)(a[2]^a[3]))),(byte)1)), (byte)0);
+			byte r4 = S(a[3], (byte)(b[3]^r3), (byte)1);
 			byte[] ret = {r1,r2,r3,r4};
 			return ret;
 		} else {
@@ -246,11 +235,6 @@ public class FEALNX {
 	
 	public static byte rotateLeft(byte bits, int shift) {
 	    return (byte)(((bits & 0xff) << shift) | ((bits & 0xff) >>> (8 - shift)));
-	}
-	
-	public static byte functionS(byte A, byte B, byte delta) {
-		byte T = (byte)(((A&255) + (B&255) + (delta&255))%256);
-		return (byte)(((T&255)<<(byte)2)|((T&255)>>>(byte)6));
 	}
 	
 	public static byte[] XORByteArrays(byte[] a, byte[] b) {
