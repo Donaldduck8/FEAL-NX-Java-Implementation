@@ -125,7 +125,7 @@ public class FEALNX {
 	public static byte[][] KeyGeneration(byte[] userKey, int numberOfRounds) {
 		if(userKey.length == 16) {
 			//Initialization
-			byte[][] subKeys = new byte[2*(numberOfRounds+4)][2];
+			byte[][] subKeys = new byte[numberOfRounds+8][2];
 			byte[] ACurrent = new byte[4];
 			System.arraycopy(userKey, 0, ACurrent, 0, 4);
 			byte[] BCurrent = new byte[4];
@@ -139,7 +139,7 @@ public class FEALNX {
 			byte[] KRX = XORByteArrays(KR1,KR2);
 			
 			//Core Loop
-			for(int i = 0; i < 4 + numberOfRounds; i++) {
+			for(int i = 0; i < 4 + (numberOfRounds/2); i++) {
 				
 				if(i%3==0) {
 					XORResult = XORByteArrays(BCurrent, KRX);
