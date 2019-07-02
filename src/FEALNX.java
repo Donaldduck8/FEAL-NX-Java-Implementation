@@ -4,46 +4,6 @@ public class FEALNX {
 		testMethod();
 	}
 	
-	public static String byteArrayToHexString(byte[] b) {
-		StringBuilder sb = new StringBuilder();
-		for(byte aa : b) {
-			sb.append(String.format("%02X", aa));
-		}
-		String ret = sb.toString();
-		sb.setLength(0);
-		return ret;
-	}
-	
-	public static String byteToBinaryString(byte b) {
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 7; i >= 0; --i) {
-	        sb.append(b >>> i & 1);
-	    }
-		String ret = sb.toString();
-		sb.setLength(0);
-	    return ret;
-	}
-	
-	public static byte[] hexStringToByteArray(String s) {
-	    int len = s.length();
-	    byte[] ret = new byte[len / 2];
-	    for (int i = 0; i < len; i += 2) {
-	        ret[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-									+ Character.digit(s.charAt(i+1), 16));
-	    }
-	    return ret;
-	}
-	
-	public static byte hexStringToByte(String s) {
-		if(s.length() != 2) {
-			throw new IllegalArgumentException();
-		}
-		byte ret = (byte) Character.digit(s.charAt(0), 16);
-		ret = (byte) (ret << 4);
-		ret = (byte) ((byte) ret + Character.digit(s.charAt(1), 16));
-	    return ret;
-	}
-	
 	public static byte[] EncryptFEALNX(byte[] PlainText, byte[] Key, int numberOfRounds) {
 		if(PlainText.length == 8 && Key.length == 16 && numberOfRounds >= 0) {
 			byte[][] subKeys = KeyGeneration(Key, numberOfRounds);
@@ -303,5 +263,45 @@ public class FEALNX {
 		} else {
 			throw new IllegalArgumentException();
 		}
+	}
+		
+	public static String byteArrayToHexString(byte[] b) {
+		StringBuilder sb = new StringBuilder();
+		for(byte aa : b) {
+			sb.append(String.format("%02X", aa));
+		}
+		String ret = sb.toString();
+		sb.setLength(0);
+		return ret;
+	}
+	
+	public static String byteToBinaryString(byte b) {
+	    StringBuilder sb = new StringBuilder();
+	    for (int i = 7; i >= 0; --i) {
+	        sb.append(b >>> i & 1);
+	    }
+		String ret = sb.toString();
+		sb.setLength(0);
+	    return ret;
+	}
+	
+	public static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] ret = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        ret[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+									+ Character.digit(s.charAt(i+1), 16));
+	    }
+	    return ret;
+	}
+	
+	public static byte hexStringToByte(String s) {
+		if(s.length() != 2) {
+			throw new IllegalArgumentException();
+		}
+		byte ret = (byte) Character.digit(s.charAt(0), 16);
+		ret = (byte) (ret << 4);
+		ret = (byte) ((byte) ret + Character.digit(s.charAt(1), 16));
+	    return ret;
 	}
 }
